@@ -1,192 +1,119 @@
 <template>
     <div class="main-content">
 
-      <div class="story-gallery">
-        <div class="story story1">
-          <img src="../assets/upload.png">
-          <p>Post Story</p>
-        </div>
-        <div class="story story2">
-          <img src="../assets/member-1.png">
-          <p>Alison</p>
-        </div>
-        <div class="story story3">
-          <img src="../assets/member-2.png">
-          <p>Jackson</p>
-        </div>
-        <div class="story story4">
-          <img src="../assets/member-3.png">
-          <p>Samona</p>
-        </div>
-        <div class="story story5">
-          <img src="../assets/member-4.png">
-          <p>John Doe</p>
-        </div>
-      </div>
-
-
       <div class="write-post-container">
         <div class="user-profile">
           <img src="../assets/profile-pic.png">
           <div>
             <p>John Nicholson</p>
-            <small>Public <fa icon="caret-down"/></small>
           </div>
         </div>
 
         <div class="post-input-container">
-          <textarea rows="3" placeholder="What's on your mind, John?" ></textarea>
-          <div class="add-post-links">
-            <a><router-link to="#"><img src="../assets/live-video.png"> Live Video</router-link></a>
-            <a><router-link to="#"><img src="../assets/photo.png"> Photo/Video</router-link></a>
-            <a><router-link to="#"><img src="../assets/feeling.png"> Feeling/Activity</router-link></a>
-          </div>
+          <form @submit.prevent="onSubmit">
+            <textarea v-model="form.text" rows="4" placeholder="What's on your mind, John?" ></textarea>
+            <label for="select">What's a category?</label>
+            <select id="select" class="form-select" v-model="form.categories">
+              <option value="GameDev">GameDev</option>
+              <option value="IT">IT</option>
+              <option value="Database-Managment">Database-Managment</option>
+              <option value="Graphic Design">Graphic Design</option>
+              <option value="Network Engineer">Network Engineer</option>
+              <option value="WEB Development">WEB Development</option>
+              <option value="Remote Work">Remote Work</option>
+            </select>
+            <div class="add-post-links">
+              <button type="submit" @click="onUpload" class="btn btn-primary ms-auto">Create Post</button>
+            </div>
+          </form>
         </div>
 
       </div>
 
-      <div class="post-container">
+      <div class="post-container" v-for="post in posts" :key="post.id">
         <div class="post-row">
           <div class="user-profile">
             <img src="../assets/profile-pic.png">
               <div>
                 <p>John Nicholson</p>
-                <span>June 24 2021, 13:40pm</span>
+                <span>{{formatDate(post.date)}}</span>
               </div>
           </div>
-          <a href="#"><fa icon="ellipsis-v"/></a>
+          <button class="btn" @click="delPost(post.id)"><fa icon="trash" style="color:lightcoral"/></button>
         </div>
-        <p class="post-text">Kopytko <span>@Kopytko</span> Kopytko Kopytko Kopytko Kopytko Kopytko Kopytko Kopytko Kopytko Kopytko Kopytko Kopytko Kopytko Kopytko Kopytko Kopytko Kopytko Kopytko Kopytko Kopytko Kopytko Kopytko Kopytko . 
-          <a href="#">#Kopytko</a><a href="#">#KopytkoYoutube</a></p>
-          <img src="../assets/feed-image-1.png" class="post-img">
-
+        <p class="post-text"> {{ post.text }} <br/>
+          <a href=# v-for="cat in post.categories" :key="cat"> #{{ cat }}</a></p>
+          <img :src="'@/assets/img/image-'+post.img" class="post-img">
           <div class="post-row">
             <div class="activity-icons">
-              <div><img src="../assets/like-blue.png"> 120</div>
-              <div><img src="../assets/comments.png"> 42</div>
-              <div><img src="../assets/share.png"> 20</div>
-            </div>
-            <div class="post-profile-icon">
-              <img src="../assets/profile-pic.png"> <fa icon="caret-down"/>
-            </div>
-          </div>
-      </div>
-
-      <div class="post-container">
-        <div class="post-row">
-          <div class="user-profile">
-            <img src="../assets/profile-pic.png">
-              <div>
-                <p>John Nicholson</p>
-                <span>June 24 2021, 13:40pm</span>
-              </div>
-          </div>
-          <a href="#"><fa icon="ellipsis-v"/></a>
-        </div>
-        <p class="post-text">Kordełka <span>@Kordełka</span> Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka. 
-          <a href="#">#Kordełka</a><a href="#">#KordełkaYoutube</a></p>
-          <img src="../assets/feed-image-2.png" class="post-img">
-
-          <div class="post-row">
-            <div class="activity-icons">
-              <div><img src="../assets/like.png"> 120</div>
-              <div><img src="../assets/comments.png"> 42</div>
-              <div><img src="../assets/share.png"> 20</div>
-            </div>
-            <div class="post-profile-icon">
-              <img src="../assets/profile-pic.png"> <fa icon="caret-down"/>
-            </div>
-          </div>
-      </div>
-
-      <div class="post-container">
-        <div class="post-row">
-          <div class="user-profile">
-            <img src="../assets/profile-pic.png">
-              <div>
-                <p>John Nicholson</p>
-                <span>June 24 2021, 13:40pm</span>
-              </div>
-          </div>
-          <a href="#"><fa icon="ellipsis-v"/></a>
-        </div>
-        <p class="post-text">Kordełka <span>@Kordełka</span> Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka. 
-          <a href="#">#Kordełka</a><a href="#">#KordełkaYoutube</a></p>
-          <img src="../assets/feed-image-3.png" class="post-img">
-
-          <div class="post-row">
-            <div class="activity-icons">
-              <div><img src="../assets/like.png"> 120</div>
-              <div><img src="../assets/comments.png"> 42</div>
-              <div><img src="../assets/share.png"> 20</div>
-            </div>
-            <div class="post-profile-icon">
-              <img src="../assets/profile-pic.png"> <fa icon="caret-down"/>
-            </div>
-          </div>
-      </div>
-
-      <div class="post-container">
-        <div class="post-row">
-          <div class="user-profile">
-            <img src="../assets/profile-pic.png">
-              <div>
-                <p>John Nicholson</p>
-                <span>June 24 2021, 13:40pm</span>
-              </div>
-          </div>
-          <a href="#"><fa icon="ellipsis-v"/></a>
-        </div>
-        <p class="post-text">Kordełka <span>@Kordełka</span> Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka. 
-          <a href="#">#Kordełka</a><a href="#">#KordełkaYoutube</a></p>
-          <img src="../assets/feed-image-4.png" class="post-img">
-
-          <div class="post-row">
-            <div class="activity-icons">
-              <div><img src="../assets/like.png"> 120</div>
-              <div><img src="../assets/comments.png"> 42</div>
-              <div><img src="../assets/share.png"> 20</div>
-            </div>
-            <div class="post-profile-icon">
-              <img src="../assets/profile-pic.png"> <fa icon="caret-down"/>
-            </div>
-          </div>
-      </div>
-
-      <div class="post-container">
-        <div class="post-row">
-          <div class="user-profile">
-            <img src="../assets/profile-pic.png">
-              <div>
-                <p>John Nicholson</p>
-                <span>June 24 2021, 13:40pm</span>
-              </div>
-          </div>
-          <a href="#"><fa icon="ellipsis-v"/></a>
-        </div>
-        <p class="post-text">Kordełka <span>@Kordełka</span> Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka Kordełka. 
-          <a href="#">#Kordełka</a><a href="#">#KordełkaYoutube</a></p>
-          <img src="../assets/feed-image-5.png" class="post-img">
-
-          <div class="post-row">
-            <div class="activity-icons">
-              <div><img src="../assets/like.png"> 120</div>
-              <div><img src="../assets/comments.png"> 42</div>
-              <div><img src="../assets/share.png"> 20</div>
-            </div>
-            <div class="post-profile-icon">
-              <img src="../assets/profile-pic.png"> <fa icon="caret-down"/>
+              <div id="like"><button class="btn" @click="addLike(post)"><i class="fas fa-thumbs-up"></i> {{post.likes}}</button></div>
+              <div><button class="btn"><img src="../assets/comments.png"> {{  }}</button></div>
             </div>
           </div>
       </div>
 
       <button type="button" class="load-more-btn">Load More</button>
-
-
-      
+     
     </div>
 </template>
+
+<script>
+  import { useLoadPosts, createPost, countComments, updatePost, deletePost} from '@/firebase'
+  import { reactive } from 'vue'
+  export default {
+     methods: {
+        createPost,
+        countComments,
+        deletePost,
+        addLike(post){
+          post.likes += 1
+          updatePost(post.id, post)
+        },
+        formatDate(date) {
+          var postdate = date.toDate()
+          var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: "numeric", minute: "numeric" };
+          return postdate.toLocaleDateString("en-En", options)
+        },
+        delPost(id){
+          if (window.confirm("Do you really want to delete?")) {
+            deletePost(id).then(() => {
+                console.log("Document deleted!");
+            })
+            .catch((error) => {
+                console.error(error);
+            })
+          }
+        }
+     },
+    setup() {
+      const form = reactive({ text: '', date:'', likes: 0, categories: "", img:""})
+      const onSubmit = async () => {
+        var min = Math.ceil(1);
+        var max = Math.floor(6);
+        var temp = form.categories.toString().split(", ")
+        form.date = new Date()
+        form.categories = temp
+        form.img = Math.floor(Math.random() * (max - min + 1)) + min; 
+        await createPost({ ...form })
+        form.text = ''
+        form.date = ''
+        form.categories = ''
+        form.img=""
+        temp=[]
+      }
+      const posts = useLoadPosts()
+      return { posts, form, onSubmit }
+    }
+  }
+</script>
+
 <style>
+
+.fa-thumbs-up{
+  color: grey;
+}
+
+
 .story-gallery{
   display: flex;
   justify-content: space-between;

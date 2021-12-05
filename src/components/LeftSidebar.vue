@@ -1,34 +1,37 @@
 <template>
     <div class="left-sidebar">
       <div class="imp-links">
-        <a><router-link to="#"><img src="../assets/news.png">Latest News</router-link></a>
-        <a><router-link to="#"><img src="../assets/friends.png">Friends</router-link></a>
-        <a><router-link to="#"><img src="../assets/group.png">Group</router-link></a>
-        <a><router-link to="#"><img src="../assets/marketplace.png">Market</router-link></a>
-        <a><router-link to="#"><img src="../assets/watch.png">Watch</router-link></a>
-        <a><router-link to="#">See More</router-link></a>
-      </div>
-      <div class="shortcut-links">
-        <p>Twoje grupy</p>
-        <a><router-link to="#"><img src="../assets/shortcut-1.png"> Web Developers </router-link></a>
-        <a><router-link to="#"><img src="../assets/shortcut-2.png"> Web Design Course </router-link></a>
-        <a><router-link to="#"><img src="../assets/shortcut-3.png"> Full Stack Development </router-link></a>
-        <a><router-link to="#"><img src="../assets/shortcut-4.png"> Website Experts </router-link></a>
+        <a><router-link to="#"><h3>Categories</h3></router-link></a>
+        <a><router-link to="#"><fa id="game-dev" icon="gamepad"/>GameDev</router-link></a>
+        <a><router-link to="#"><fa id="laptop" icon="laptop"/>IT</router-link></a>
+        <a><router-link to="#"><fa id="server" icon="server"/>Database-Managment</router-link></a>
+        <a><router-link to="#"><fa id="graphic" icon="paint-roller"/>Graphic Designer</router-link></a>
+        <a><router-link to="#"><fa id="network" icon="network-wired"/>Network Engineer</router-link></a>
+        <a><router-link to="#"><fa id="web" icon="pager"/>WEB Development</router-link></a>
+        <a><router-link to="#"><fa id="work" icon="laptop-house"/>Remote IT Work</router-link></a>
       </div>
     </div>
 </template>
+
 <style>
+
+#scroll-down{
+  margin-left: 10px;
+}
+#game-dev, #server, #work, #laptop, #network, #graphic, #web{
+  margin-right: 10px;
+}
 .left-sidebar{
 
-  flex-basis: 25%;
+  flex-basis: 15%;
   position: sticky;
-  top: 70px;
+  top: 80px;
   align-self: flex-start;
   
 }
 
 .main-content{
-  flex-basis: 47%;
+  flex-basis: 55%;
 }
 .imp-links a, .shortcut-links a{
   text-decoration: none;

@@ -2,65 +2,74 @@
     <div class="right-sidebar">
 
       <div class="sidebar-title">
-        <h4>Events</h4>
-        <a><router-link to="#">See All</router-link></a>  
+        <h4>Posts on platform</h4>
+        <a><router-link to="#">See All</router-link></a>
       </div> 
-
       <div class="event">
+
         <div class="left-event">
-          <h3>18</h3>
-          <span>March</span>
+          <h5>All post on platform</h5>
         </div>
         <div class="right-event">
-          <h4>Social Media</h4>
-          <p><img src="../assets/location.png">Willson Tech Park</p>
-          <a><router-link to="#">More Info</router-link></a>
+          <h3> {{sizeAll[0]}}</h3>
         </div>
       </div>
       <div class="event">
         <div class="left-event">
-          <h3>22</h3>
-          <span>June</span>
+          <h5>Post on month</h5>
         </div>
         <div class="right-event">
-          <h4>Mobile Marketing</h4>
-          <p>Willson Tech Park</p>
-          <a><router-link to="#">More Info</router-link></a>
+          <h3>{{sizeMonth[0]}}</h3>
         </div>
       </div>
       <div class="sidebar-title">
         <h4>Advertisement</h4>
-        <a><router-link to="#">Close</router-link></a>  
+        <a><router-link to="#">Close</router-link></a>
       </div> 
       <img src="../assets/advertisement.png" style="width: 100%; margin-bottom: 20px; border-radius: 4px;">
 
+    
       <div class="sidebar-title">
-        <h4>Conversation</h4>
-        <a><router-link to="#">Hide Chat</router-link></a>  
-      </div>
+        <h4>Advertisement</h4>
+        <a><router-link to="#">Close</router-link></a>
+      </div> 
+      <img src="../assets/advertisement.png" style="width: 100%; margin-bottom: 20px; border-radius: 4px;">
 
-      <div class="online-list">
-        <div class="online">
-          <img src="../assets/member-1.png">
-        </div>
-        <p>Alison Mina</p>
-      </div>
-      <div class="online-list">
-        <div class="online">
-          <img src="../assets/member-2.png">
-        </div>
-        <p>Jackson Aston</p>
-      </div>
-      <div class="online-list">
-        <div class="online">
-          <img src="../assets/member-3.png">
-        </div>
-        <p>Samona Rose</p>
-      </div>
-
-    </div>  
+    </div>
 </template>
+
+<script>
+  import { countAllPosts, countMonthPosts } from '@/firebase'
+  export default {
+      methods: {
+          countAllPosts,
+      },
+      setup() {
+        var date = new Date();
+        console.log(date)
+        var sizeAll = countAllPosts()
+        var sizeMonth = countMonthPosts(date.getMonth(), date.getFullYear())
+        return { sizeAll, sizeMonth }
+      }
+    }
+    
+</script>
+
+
 <style >
+.right-event{
+  color:#1876f2;
+  margin-left: auto; 
+  margin-right: 1px;
+  padding: 2px;
+}
+.event{
+  display: flex;
+  font-size: 14px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ccc;
+  background: transparent;
+}
 .right-sidebar{
   flex-basis: 25%;
   position: sticky;
@@ -90,17 +99,6 @@
   display: flex;
   font-size: 14px;
   margin-bottom: 20px;
-}
-.left-event{
-  border-radius: 10px;
-  height: 75px;
-  width: 65px;
-  margin-right: 15px;
-  padding-top: 10px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 .event p{
   font-size: 12px;

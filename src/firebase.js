@@ -25,35 +25,104 @@ const auth = firebase.auth()
 const storage = firebase.storage()
 
 const usersCollection = db.collection('users')
+const postsCollection = db.collection('posts')
+const commentsCollection = db.collection('comments')
 
+// user methods //
 export const createUser = user => {
     return usersCollection.add(user)
 }
 
-export const getUser = async id => {
-    const user = await usersCollection.doc(id).get()
-    return user.exists ? user.data() : null
-}
+// post methods //
 
-export const updateUser = ( id, user ) => {
-    return usersCollection.doc(id).update(user)
+export const createPost = post => {
+    return postsCollection.add(post)
 }
-
-export const deleteUser = id => {
-    return usersCollection.doc(id).delete()
+  
+export const getPost = async id => {
+    const post = await postsCollection.doc(id).get()
+    return post.exists ? post.data() : null
 }
-
-export const useLoadUsers = () => {
-    const users = ref([])
-    const close = usersCollection.onSnapshot(snapshot => {
-        users.value = snapshot.doc.map(doc => ({id: doc.id, ...doc.data() }))
+  
+export const updatePost = (id, post) => {
+    return postsCollection.doc(id).update(post)
+}
+  
+export const deletePost = id => {
+    return postsCollection.doc(id).delete()
+}
+  
+export const useLoadPosts = () => {
+    const posts = ref([])
+    const close = postsCollection.onSnapshot(snapshot => {
+      posts.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
     })
     onUnmounted(close)
-    return users;
+    return posts
 }
+
+export const countAllPosts = () => {
+    var size = []
+    const close = postsCollection.onSnapshot(snapshot => {
+      size.push( snapshot.size )
+    })
+    onUnmounted(close)
+    return size    
+}
+
+export const countMonthPosts =( month, year) => {
+    var startMonth = new Date(year,month,1)
+    var size = []
+    const close = postsCollection.where("date",'>=',startMonth).onSnapshot(snapshot => {
+      size.push( snapshot.size )
+    })
+    console.log(size)
+    onUnmounted(close)
+    return size
+    
+}
+
+// comment methods //
+
+export const createComment = comment => {
+    return commentsCollection.add(comment)
+}
+  
+export const getComment = async id => {
+    const comment = await commentsCollection.doc(id).get()
+    return comment.exists ? comment.data() : null
+}
+  
+export const updateComment = (id, comment) => {
+    return commentsCollection.doc(id).update(comment)
+}
+  
+export const deleteComment = id => {
+    return commentsCollection.doc(id).delete()
+}
+  
+export const CommentsByPost = idPost => {
+    const comment = ref([])
+    const close = commentsCollection.where("idPost",'==', idPost).onSnapshot(snapshot => {
+      comment.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+    })
+    onUnmounted(close)
+    return comment
+}
+
+export const countComments = idPost => {
+    var size = 0
+    commentsCollection.where("idPost",'==', idPost).get().then(snap => size = snap.size )
+    console.log(size)
+    return size;
+}
+
 
 export {
     db,
     auth,
     storage,
+    usersCollection,
+    postsCollection,
+    commentsCollection
 }
