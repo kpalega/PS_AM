@@ -1,6 +1,9 @@
 <template>
     <div class="main-content">
-
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text"  v-model="search" placeholder="Search">
+       </div>
       <div class="write-post-container">
         <div class="user-profile">
           <img src="../assets/profile-pic.png">
@@ -38,7 +41,7 @@
 
       </div>
 
-      <div class="post-container" v-for="post in posts" :key="post.id">
+      <div class="post-container" v-for="post in filteredList" :key="post.id">
         <div class="post-row">
           <div class="user-profile">
             <img src="../assets/profile-pic.png">
@@ -49,7 +52,7 @@
           </div>
           <button class="btn" @click="delPost(post.id)"><fa icon="trash" style="color:lightcoral"/></button>
         </div>
-        <p class="post-text"> {{ post.text }} <br/>
+        <p id="posts" class="post-text"> {{ post.text }} <br/>
           <a href=#> #{{ post.category }}</a></p>
           <img v-if="post.img != 'null'" :src="post.img" class="post-img">
           <div class="post-row">
@@ -68,6 +71,7 @@
 <script>
   import { useLoadPosts, createPost, storage, updatePost, deletePost} from '@/firebase'
   import { reactive } from 'vue'
+
   export default {
      methods: {
         forceReload: function (){
@@ -136,12 +140,19 @@
         return {
           form : reactive({ text: '', date:'', likes: 0, category: "", img:""}),
           img1: null,
-          imageData: null
+          imageData: null,
+          search: ''
         };
+      }, 
+      computed: {
+      filteredList() {
+        return this.posts.filter(post => {
+          return post.text.toLowerCase().includes(this.search.toLowerCase())
+        })
+      }
       },
     setup() {
       const posts = useLoadPosts()
-      
       return { posts }
     }
   }

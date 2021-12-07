@@ -2,10 +2,6 @@
     <nav>
         <div class="nav-left">
             <router-link to="/"><img src="../assets/logo.png" class="logo"></router-link> 
-                <div class="search-box">
-                    <img src="../assets/search.png" alt="">
-                    <input type="text" placeholder="Search">
-                </div>
 
         </div>
         <div class="nav-right">
@@ -124,12 +120,13 @@ margin-bottom: 0rem;
   cursor: pointer;
 }
 .search-box{
-  background: #053244;
-  width: 350px;
+  background: #cccc;
   border-radius: 20px;
   display: flex;
   align-items: center;
   padding: 0 15px;
+  margin-bottom: 15px;
+  color: grey;
 }
 .search-box img{
   width:18px;
