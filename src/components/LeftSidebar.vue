@@ -1,14 +1,14 @@
 <template>
     <div class="left-sidebar">
       <div class="imp-links">
-        <a><router-link to="#"><h3>Categories</h3></router-link></a>
-        <a><router-link to="#"><fa id="game-dev" icon="gamepad"/>GameDev</router-link></a>
-        <a><router-link to="#"><fa id="laptop" icon="laptop"/>IT</router-link></a>
-        <a><router-link to="#"><fa id="server" icon="server"/>Database-Managment</router-link></a>
-        <a><router-link to="#"><fa id="graphic" icon="paint-roller"/>Graphic Designer</router-link></a>
-        <a><router-link to="#"><fa id="network" icon="network-wired"/>Network Engineer</router-link></a>
-        <a><router-link to="#"><fa id="web" icon="pager"/>WEB Development</router-link></a>
-        <a><router-link to="#"><fa id="work" icon="laptop-house"/>Remote IT Work</router-link></a>
+        <a href='#'><h3>Categories</h3></a>
+        <a href='#'><fa id="game-dev" icon="gamepad"/>GameDev</a>
+        <a href='#'><fa id="laptop" icon="laptop"/>IT</a>
+        <a href='#'><fa id="server" icon="server"/>Database-Managment</a>
+        <a href='#'><fa id="graphic" icon="paint-roller"/>Graphic Designer</a>
+        <a href='#'><fa id="network" icon="network-wired"/>Network Engineer</a>
+        <a href='#'><fa id="web" icon="pager"/>WEB Development</a>
+        <a href='#'><fa id="work" icon="laptop-house"/>Remote IT Work</a>
       </div>
     </div>
 </template>
@@ -20,6 +20,7 @@
 }
 #game-dev, #server, #work, #laptop, #network, #graphic, #web{
   margin-right: 10px;
+  color:#1876f2
 }
 .left-sidebar{
 
@@ -44,9 +45,6 @@
 .imp-links a img{
   width: 25px;
   margin-right: 15px;
-}
-.imp-links a:last-child{
-  color: #1876f2;
 }
 .imp-links{
   border-bottom: 1px solid #ccc ;

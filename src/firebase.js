@@ -61,6 +61,15 @@ export const useLoadPosts = () => {
     return posts
 }
 
+export const sortPostByCategory = category => {
+    const posts = ref([])
+    const close = postsCollection.where("category","==",category).orderBy('date','desc').onSnapshot(snapshot => {
+      posts.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+    })
+    onUnmounted(close)
+    return posts
+}
+
 // comment methods //
 
 export const createComment = comment => {

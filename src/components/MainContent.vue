@@ -9,11 +9,11 @@
           </div>
         </div>
 
-        <div class="post-input-container">
+        <div class="post-input-container"  >
           <form @submit.prevent="onSubmit">
             <textarea v-model="form.text" rows="4" placeholder="What's on your mind, John?" required ></textarea>
             <label for="select">What's a category?</label>
-            <select id="select" class="form-select" v-model="form.categories" required>
+            <select id="select" class="form-select" v-model="form.category" required>
               <option value="GameDev">GameDev</option>
               <option value="IT">IT</option>
               <option value="Database-Managment">Database-Managment</option>
@@ -22,8 +22,16 @@
               <option value="WEB Development">WEB Development</option>
               <option value="Remote Work">Remote Work</option>
             </select>
+            <br/>
+            <div class="d-flex flex-row justify-content-center p-2" v-if="imageData != null">                     
+              <img  v-if="img1 != null" class="post-img" :src="img1">
+              <br>
+            </div> 
             <div class="add-post-links">
-              <button type="submit" @click="onUpload" class="btn btn-primary ms-auto">Create Post</button>
+              <div  class="col-4" >
+              <input class="form-control" type="file" @change="previewImage" accept="image/*" :key="componentKey">
+              </div>
+              <button type="submit" @click="onUpload" class="btn btn-primary mx-2 ms-auto">Create Post</button>
             </div>
           </form>
         </div>
@@ -42,8 +50,8 @@
           <button class="btn" @click="delPost(post.id)"><fa icon="trash" style="color:lightcoral"/></button>
         </div>
         <p class="post-text"> {{ post.text }} <br/>
-          <a href=# v-for="cat in post.categories" :key="cat"> #{{ cat }}</a></p>
-          <img :src="'@/assets/img/image-'+post.img" class="post-img">
+          <a href=#> #{{ post.category }}</a></p>
+          <img v-if="post.img != 'null'" :src="post.img" class="post-img">
           <div class="post-row">
             <div class="activity-icons">
               <div id="like"><button class="btn" @click="addLike(post)"><i class="fas fa-thumbs-up"></i> {{post.likes}}</button></div>
@@ -58,13 +66,14 @@
 </template>
 
 <script>
-  import { useLoadPosts, createPost, countComments, updatePost, deletePost} from '@/firebase'
+  import { useLoadPosts, createPost, storage, updatePost, deletePost} from '@/firebase'
   import { reactive } from 'vue'
   export default {
      methods: {
-        createPost,
-        countComments,
-        deletePost,
+        forceReload: function (){
+          this.componentKey++
+          console.log("reloading")
+        },
         addLike(post){
           post.likes += 1
           updatePost(post.id, post)
@@ -83,27 +92,57 @@
                 console.error(error);
             })
           }
-        }
+        }, 
+        async onSubmit() {
+          console.log(this.img1)
+          this.form.date = new Date()
+          await createPost({ ...this.form })
+          this.form.text = ''
+          this.form.date = ''
+          this.form.category = ''
+          this.form.img=""
+          this.img1 = null
+          this.imageData = null
+          this.forceReload()
+        },
+         
+        previewImage(event) {
+              this.uploadValue=0;
+              this.img1=null;
+
+              this.imageData = event.target.files[0];
+              this.onUpload()
+          },
+        async onUpload(){
+            this.img1=null;
+            var uuidv4 = require('uuid/v4');
+            var filename = uuidv4();
+
+            const storageRef=storage.ref(`${filename}`).put(this.imageData);
+            await storageRef.on(`state_changed`,snapshot=>{
+                this.uploadValue = (snapshot.bytesTransferred/snapshot.totalBytes)*100;
+                },
+                error=>{console.log(error.message)},
+                ()=>{this.uploadValue=100;
+                    storageRef.snapshot.ref.getDownloadURL().then((url)=>{
+                        this.img1 = url
+                        this.form.img = url;
+                    });
+                }      
+            );
+        },
      },
+     data() {
+        return {
+          form : reactive({ text: '', date:'', likes: 0, category: "", img:""}),
+          img1: null,
+          imageData: null
+        };
+      },
     setup() {
-      const form = reactive({ text: '', date:'', likes: 0, categories: "", img:""})
-      const onSubmit = async () => {
-        var min = Math.ceil(1);
-        var max = Math.floor(6);
-        var temp = form.categories.toString().split(", ")
-        form.date = new Date()
-        form.categories = temp
-        form.img = Math.floor(Math.random() * (max - min + 1)) + min; 
-        await createPost({ ...form })
-        form.text = ''
-        form.date = ''
-        form.categories = ''
-        form.img=""
-        temp=[]
-      }
       const posts = useLoadPosts()
       
-      return { posts, form, onSubmit }
+      return { posts }
     }
   }
 </script>
@@ -193,7 +232,9 @@
 }
 .post-input-container{
   padding-left: 55px;
+  padding-right: 35px;
   padding-top: 20px;
+  padding-bottom: 20px;
 }
 .post-input-container textarea{
   width: 100%;
