@@ -54,32 +54,11 @@ export const deletePost = id => {
   
 export const useLoadPosts = () => {
     const posts = ref([])
-    const close = postsCollection.onSnapshot(snapshot => {
+    const close = postsCollection.orderBy('date','desc').onSnapshot(snapshot => {
       posts.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
     })
     onUnmounted(close)
     return posts
-}
-
-export const countAllPosts = () => {
-    var size = []
-    const close = postsCollection.onSnapshot(snapshot => {
-      size.push( snapshot.size )
-    })
-    onUnmounted(close)
-    return size    
-}
-
-export const countMonthPosts =( month, year) => {
-    var startMonth = new Date(year,month,1)
-    var size = []
-    const close = postsCollection.where("date",'>=',startMonth).onSnapshot(snapshot => {
-      size.push( snapshot.size )
-    })
-    console.log(size)
-    onUnmounted(close)
-    return size
-    
 }
 
 // comment methods //

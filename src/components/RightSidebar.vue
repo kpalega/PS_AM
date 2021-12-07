@@ -10,16 +10,16 @@
         <div class="left-event">
           <h5>All post on platform</h5>
         </div>
-        <div class="right-event">
-          <h3> {{sizeAll[0]}}</h3>
+        <div class="right-event" :key="componentKey">
+          <h3> {{sizeAll}}</h3>
         </div>
       </div>
       <div class="event">
         <div class="left-event">
           <h5>Post on month</h5>
         </div>
-        <div class="right-event">
-          <h3>{{sizeMonth[0]}}</h3>
+        <div class="right-event" :key="componentKey"> 
+          <h3>{{sizeMonth}}</h3>
         </div>
       </div>
       <div class="sidebar-title">
@@ -34,23 +34,35 @@
         <a><router-link to="#">Close</router-link></a>
       </div> 
       <img src="../assets/advertisement.png" style="width: 100%; margin-bottom: 20px; border-radius: 4px;">
-
+      <button @click="forceReload()">Reloa</button>
     </div>
 </template>
 
 <script>
-  import { countAllPosts, countMonthPosts } from '@/firebase'
-  export default {
-      methods: {
-          countAllPosts,
-      },
-      setup() {
-        var date = new Date();
-        console.log(date)
-        var sizeAll = countAllPosts()
-        var sizeMonth = countMonthPosts(date.getMonth(), date.getFullYear())
-        return { sizeAll, sizeMonth }
-      }
+  import { postsCollection} from '@/firebase'
+  export default {  
+    data() {
+      return {
+        sizeAll:  postsCollection.onSnapshot(snap =>{
+            this.sizeAll = snap.size;
+          }),
+        sizeMonth: postsCollection.where("date",'>=',this.startMonth).onSnapshot(snapshot => {
+             this.sizeMonth = snapshot.size
+          }),
+        componentKey: 0,
+      };
+    }, 
+    methods:{
+        forceReload: function (){
+          this.componentKey++
+          console.log("reloading")
+        }
+    },
+    setup(){
+      var date =  new Date();
+      var startMonth = new Date(date.getFullYear(),date.getMonth(),1)
+      return{ startMonth }
+    }
     }
     
 </script>

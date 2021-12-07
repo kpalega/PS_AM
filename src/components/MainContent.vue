@@ -11,9 +11,9 @@
 
         <div class="post-input-container">
           <form @submit.prevent="onSubmit">
-            <textarea v-model="form.text" rows="4" placeholder="What's on your mind, John?" ></textarea>
+            <textarea v-model="form.text" rows="4" placeholder="What's on your mind, John?" required ></textarea>
             <label for="select">What's a category?</label>
-            <select id="select" class="form-select" v-model="form.categories">
+            <select id="select" class="form-select" v-model="form.categories" required>
               <option value="GameDev">GameDev</option>
               <option value="IT">IT</option>
               <option value="Database-Managment">Database-Managment</option>
@@ -102,6 +102,7 @@
         temp=[]
       }
       const posts = useLoadPosts()
+      
       return { posts, form, onSubmit }
     }
   }
